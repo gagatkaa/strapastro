@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "strapi-webhook-proxy-creator": "^1.0.3"
-  }
-}
