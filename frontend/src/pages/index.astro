@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProductsList from "../components/ProductsList.astro";
+import Filter from "../components/Filter.astro";
+import fetchApi from "../lib/strapi";
+
+const products = await fetchApi({
+  endpoint: "products",
+  wrappedByKey: "data",
+  query: { populate: ["image", "category"] },
+});
+
+const categories = await fetchApi({
+  endpoint: "categories",
+  wrappedByKey: "data",
+});
+---
+
+<BaseLayout pageTitle="Home">
+  <Filter categories={categories} />
+  <ProductsList products={products} />
+</BaseLayout>

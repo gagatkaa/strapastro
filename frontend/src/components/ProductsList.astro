@@ -1,0 +1,40 @@
+---
+import ProductCard from "./ProductCard.astro";
+
+// We aren't using getCollection here anymore
+//const products = await getCollection("products");
+
+// This can work, but we used a prop instead so we can reuse the component
+/*const products = await fetchApi({
+  endpoint: "products",
+  wrappedByKey: "data",
+  query: { populate: ["image"] },
+});*/
+
+const { products } = Astro.props;
+---
+
+<style>
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    grid-gap: var(--s4);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
+
+<ul>
+  {
+    products.map((product) => (
+      <li data-category={product.category?.slug}>
+        <a href={`/products/${product.documentId}`}>
+          <ProductCard product={product} />
+        </a>
+      </li>
+    ))
+  }
+</ul>

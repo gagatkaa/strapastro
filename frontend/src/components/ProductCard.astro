@@ -1,0 +1,144 @@
+---
+import { Image } from "astro:assets";
+
+const { product } = Astro.props;
+---
+
+<style>
+  article {
+    height: 100%;
+
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--defaultShadow);
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto min-content;
+    grid-template-areas:
+      "img img"
+      "title title"
+      "desc desc"
+      "price cta";
+
+    align-items: flex-start;
+    gap: var(--s1);
+
+    padding: var(--s2);
+
+    max-width: var(--maxContent);
+    margin: 0 auto;
+    margin-bottom: var(--s3);
+  }
+
+  article:hover {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 4px 12px;
+  }
+
+  .popular::after {
+    content: "";
+    background-color: var(--c-primary);
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4em;
+    height: 4em;
+    padding-top: 2em;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+
+  .popular::before {
+    content: "Top rated";
+    color: white;
+    position: absolute;
+    top: 1.4em;
+    right: 0;
+    rotate: 45deg;
+    z-index: 2;
+    font-size: 0.7em;
+  }
+
+  h3 {
+    font-size: var(--fs-l);
+    font-weight: 900;
+    grid-area: title;
+  }
+
+  img {
+    aspect-ratio: 3/4;
+    object-fit: contain;
+
+    grid-area: img;
+
+    justify-self: center;
+
+    padding: var(--s1);
+  }
+
+  .description {
+    grid-area: desc;
+    align-self: baseline;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: var(--c-mid);
+  }
+
+  .price {
+    color: var(--c-primary);
+    grid-area: price;
+    line-height: 1;
+    align-self: flex-end;
+  }
+
+  .price span {
+    font-size: var(--fs-l);
+  }
+
+  button {
+    grid-area: cta;
+    align-self: flex-end;
+
+    background-color: var(--c-primary);
+    color: white;
+    border: none;
+    padding: var(--s_2) var(--s_1);
+    font: inherit;
+    outline-color: var(--c-primary);
+    outline-offset: var(--s_2);
+  }
+
+  button:hover {
+    background-color: var(--c-dark);
+  }
+</style>
+
+<article
+  class={product.rating.rate > 4.5 && "popular"}
+  transition:name={`product-${product.documentId}`}
+>
+  <Image
+    src={import.meta.env.STRAPI_URL + product.image.url}
+    alt="Product image"
+    inferSize
+    layout="constrained"
+    format={"avif"}
+    widths={[256, 640, 828, 1080, 1190]}
+    sizes="(min-width: 2960px) calc(12.5vw - 118px), (min-width: 2600px) calc(14.12vw - 116px), (min-width: 2240px) calc(16.47vw - 119px), (min-width: 1900px) calc(20vw - 128px), (min-width: 1540px) calc(24.71vw - 128px), (min-width: 1140px) calc(30vw - 92px), (min-width: 760px) calc(45vw - 86px), (min-width: 400px) calc(90vw - 70px), calc(27.5vw + 168px)"
+  />
+  <h3>
+    {product.title}
+  </h3>
+
+  <p class="description">
+    {product.description}
+  </p>
+
+  <p class="price">&euro; <span>{product.price}</span></p>
+  <button>Buy now</button>
+</article>
